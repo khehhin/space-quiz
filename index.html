@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Space Quiz 🚀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Outfit:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f1ff;--card:#ffffff;--text:#1d1b3a;--muted:#6b6a8a;--accent:#6c4cff;--accent2:#ff5fa2;
+  --good:#17c27a;--bad:#ff4d5e;--border:#e1ddff;--shadow:0 10px 40px rgba(108,76,255,.18);
+  --hex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.3l-10.99-6.35V0h-2zm0 49v-8l12.99-7.5H28v2.3l-10.99 6.35V49h-2z' fill='%236c4cff' fill-opacity='0.09'/%3E%3C/svg%3E");
+}
+[data-theme="dark"]{
+  --bg:#0a0b1e;--card:#15173a;--text:#eef0ff;--muted:#9a9cc4;--accent:#8f7bff;--accent2:#ff6fb0;
+  --good:#2ee59d;--bad:#ff6b7a;--border:#2a2d61;--shadow:0 10px 40px rgba(0,0,0,.5);
+  --hex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.3l-10.99-6.35V0h-2zm0 49v-8l12.99-7.5H28v2.3l-10.99 6.35V49h-2z' fill='%238f7bff' fill-opacity='0.12'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px 16px;
+  font-family:'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;
+  background-image:radial-gradient(circle at 20% 10%,rgba(108,76,255,.15),transparent 40%),radial-gradient(circle at 80% 90%,rgba(255,95,162,.15),transparent 40%),var(--hex);
+  background-attachment:fixed}
+main{width:100%;max-width:480px;background:var(--card);border-radius:24px;padding:24px;box-shadow:var(--shadow);border:1px solid var(--border);margin:auto 0}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+h1{display:flex;align-items:center;gap:8px;margin:0;padding:7px 12px;border-radius:10px;
+  font-family:'Share Tech Mono',ui-monospace,Consolas,monospace;font-size:1.05rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  color:#7dffcf;background:linear-gradient(#0b1030,#101845);border:1px solid #2f3f9a;
+  box-shadow:inset 0 0 12px rgba(125,255,207,.15),0 0 14px rgba(108,76,255,.35);text-shadow:0 0 8px rgba(125,255,207,.6);position:relative;overflow:hidden}
+h1::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);pointer-events:none}
+h1 .led{width:9px;height:9px;border-radius:50%;background:#3dff9b;box-shadow:0 0 8px #3dff9b;animation:blink 1.6s steps(2,start) infinite;flex:none}
+h1 .live{font-size:.6rem;letter-spacing:.2em;color:#0b1030;background:#7dffcf;border-radius:4px;padding:2px 5px;text-shadow:none}
+@keyframes blink{50%{opacity:.25}}
+.right{display:flex;gap:8px;align-items:center}
+.score{font-family:'Space Grotesk',sans-serif;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:6px 12px;border-radius:999px;transition:transform .2s}
+.score.pop{animation:pop .5s}
+#theme{border:1px solid var(--border);background:transparent;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer}
+.bar{height:10px;background:var(--border);border-radius:999px;margin:18px 0 6px;overflow:hidden}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:width .5s cubic-bezier(.4,1.4,.6,1)}
+.count{color:var(--muted);font-size:.85rem;font-family:'Space Grotesk',sans-serif}
+.emoji{font-size:3.4rem;text-align:center;margin:14px 0 4px;animation:float 3s ease-in-out infinite}
+h2{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;line-height:1.35;margin:8px 0 16px;text-align:center}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;font-weight:600;text-align:left;padding:13px 16px;border-radius:14px;border:2px solid var(--border);background:transparent;color:var(--text);cursor:pointer;transition:transform .15s,border-color .2s,background .2s}
+.opt:hover:not(:disabled){transform:translateY(-2px);border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.correct{background:var(--good);border-color:var(--good);color:#04281a;animation:pop .5s}
+.opt.wrong{background:var(--bad);border-color:var(--bad);color:#fff;animation:shake .4s}
+.fb{min-height:48px;text-align:center;margin-top:14px;font-weight:600}
+.fb small{display:block;color:var(--muted);font-weight:400;margin-top:2px}
+.fb.in{animation:pop .5s}
+button.next{display:block;width:100%;margin-top:8px;font:inherit;font-weight:700;color:#fff;border:0;border-radius:14px;padding:13px;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:transform .15s}
+button.next:hover{transform:scale(1.02)}
+.hidden{display:none}
+:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+.final{text-align:center}
+.final .big{font-size:4rem;animation:float 2s ease-in-out infinite}
+.final h2{font-size:1.6rem}
+.confetti{position:fixed;top:-20px;font-size:1.4rem;pointer-events:none;animation:fall linear forwards;z-index:9}
+@keyframes pop{0%{transform:scale(.9)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes float{50%{transform:translateY(-8px)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.8}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span class="led" aria-hidden="true"></span>Space Quiz<span class="live" aria-hidden="true">LIVE</span></h1>
+    <div class="right"><span class="score" id="score">⭐ 0</span><button id="theme" aria-label="Toggle theme">🌙</button></div>
+  </header>
+  <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="10" id="barwrap"><div id="bar"></div></div>
+  <div class="count" id="count"></div>
+  <section id="quiz">
+    <div class="emoji" id="emoji"></div>
+    <h2 id="q"></h2>
+    <div class="opts" id="opts"></div>
+    <div class="fb" id="fb" aria-live="polite"></div>
+    <button class="next hidden" id="next">Next →</button>
+  </section>
+  <section id="end" class="final hidden"></section>
+</main>
+<script>
+const Q=[
+["🪐","Which planet has the most prominent ring system?",["Jupiter","Saturn","Uranus","Neptune"],1,"Saturn's rings are made mostly of ice."],
+["🔴","Which planet is known as the Red Planet?",["Mars","Venus","Mercury","Jupiter"],0,"Iron oxide dust gives Mars its colour."],
+["🌕","Who was the first person to walk on the Moon?",["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"],2,"Apollo 11, July 1969."],
+["☀️","What is the closest star to Earth?",["Proxima Centauri","The Sun","Sirius","Polaris"],1,"The Sun is about 150 million km away."],
+["🛰️","What was the first artificial satellite?",["Explorer 1","Hubble","Sputnik 1","Vostok 1"],2,"Launched by the USSR in 1957."],
+["🌌","What is the name of our galaxy?",["Andromeda","Milky Way","Triangulum","Whirlpool"],1,"It holds 100+ billion stars."],
+["🌋","Which is the largest planet in our Solar System?",["Saturn","Earth","Neptune","Jupiter"],3,"Jupiter could fit over 1,300 Earths."],
+["🔭","Which space telescope launched in 1990?",["James Webb","Hubble","Kepler","Spitzer"],1,"Hubble orbits about 540 km above Earth."],
+["⏱️","About how long does sunlight take to reach Earth?",["8 minutes","8 seconds","8 hours","1 day"],0,"Roughly 8 minutes 20 seconds."],
+["🕳️","What is the boundary around a black hole called?",["Corona","Event horizon","Photosphere","Singularity"],1,"Nothing, not even light, escapes beyond it."]
+];
+const $=id=>document.getElementById(id);
+let i=0,score=0,locked=false;
+const praise=["Brilliant! 🎉","Out of this world! 🌟","Stellar! 🚀","Nailed it! 🔥","Cosmic! ✨"];
+const oops=["Houston, we have a problem 🛸","Not quite! 💫","Lost in space! 🌠"];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+function show(){
+  locked=false;const [e,q,o]=Q[i];
+  $("emoji").textContent=e;$("q").textContent=q;$("fb").textContent="";$("next").classList.add("hidden");
+  $("count").textContent=`Question ${i+1} of ${Q.length}`;
+  $("bar").style.width=(i/Q.length*100)+"%";$("barwrap").setAttribute("aria-valuenow",i);
+  $("opts").innerHTML="";
+  o.forEach((t,n)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=()=>answer(n,b);$("opts").appendChild(b)});
+}
+function answer(n,btn){
+  if(locked)return;locked=true;
+  const c=Q[i][3],bs=[...document.querySelectorAll(".opt")];
+  bs.forEach(b=>b.disabled=true);
+  const ok=n===c;
+  if(ok){score++;btn.classList.add("correct");$("score").textContent="⭐ "+score;$("score").classList.remove("pop");void $("score").offsetWidth;$("score").classList.add("pop");burst(18)}
+  else{btn.classList.add("wrong");bs[c].classList.add("correct")}
+  const fb=$("fb");fb.className="fb in";
+  fb.innerHTML=`<span style="color:${ok?"var(--good)":"var(--bad)"}">${ok?pick(praise):pick(oops)}</span><small>${Q[i][4]}</small>`;
+  $("bar").style.width=((i+1)/Q.length*100)+"%";
+  $("next").textContent=i===Q.length-1?"See results 🏁":"Next →";$("next").classList.remove("hidden");$("next").focus();
+}
+function burst(n){
+  const em=["🎉","✨","⭐","🚀","🌟","💫"];
+  for(let k=0;k<n;k++){const s=document.createElement("span");s.className="confetti";s.textContent=pick(em);
+    s.style.left=Math.random()*100+"vw";s.style.animationDuration=(1.5+Math.random()*1.5)+"s";s.style.animationDelay=Math.random()*.3+"s";
+    document.body.appendChild(s);setTimeout(()=>s.remove(),3500)}
+}
+$("next").onclick=()=>{i++;i<Q.length?show():finish();if(i<Q.length)document.querySelector(".opt").focus()};
+document.addEventListener("keydown",e=>{
+  if(locked||$("quiz").classList.contains("hidden")||e.ctrlKey||e.metaKey||e.altKey)return;
+  const n=parseInt(e.key,10),bs=document.querySelectorAll(".opt");
+  if(n>=1&&n<=bs.length){e.preventDefault();bs[n-1].click()}
+});
+function finish(){
+  $("quiz").classList.add("hidden");$("count").textContent="Complete!";
+  const m=score>=9?["🏆","Mission Commander!"]:score>=6?["🧑‍🚀","Great Astronaut!"]:score>=3?["🛰️","Rookie Cadet"]:["🌍","Back to Earth!"];
+  $("end").innerHTML=`<div class="big">${m[0]}</div><h2>${m[1]}</h2><p>You scored <b>${score}/${Q.length}</b></p><button class="next" onclick="restart()">Play again 🔄</button>`;
+  $("end").classList.remove("hidden");$("end").querySelector("h2").tabIndex=-1;$("end").querySelector("h2").focus();if(score>=6)burst(50);
+}
+function restart(){i=0;score=0;$("score").textContent="⭐ 0";$("end").classList.add("hidden");$("quiz").classList.remove("hidden");show();document.querySelector(".opt").focus()}
+
+const root=document.documentElement;
+function setTheme(t){root.dataset.theme=t;$("theme").textContent=t==="dark"?"☀️":"🌙"}
+setTheme(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+$("theme").onclick=()=>setTheme(root.dataset.theme==="dark"?"light":"dark");
+show();
+</script>
+</body>
+</html>
