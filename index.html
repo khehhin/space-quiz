@@ -23,14 +23,14 @@ body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:f
   background-image:radial-gradient(circle at 20% 10%,rgba(108,76,255,.15),transparent 40%),radial-gradient(circle at 80% 90%,rgba(255,95,162,.15),transparent 40%),var(--hex);
   background-attachment:fixed}
 main{width:100%;max-width:480px;background:var(--card);border-radius:24px;padding:24px;box-shadow:var(--shadow);border:1px solid var(--border);margin:auto 0}
-header{display:flex;justify-content:space-between;align-items:center;gap:8px}
-h1{display:flex;align-items:center;gap:8px;margin:0;padding:7px 12px;border-radius:10px;
-  font-family:'Share Tech Mono',ui-monospace,Consolas,monospace;font-size:1.05rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
-  color:#7dffcf;background:linear-gradient(#0b1030,#101845);border:1px solid #2f3f9a;
-  box-shadow:inset 0 0 12px rgba(125,255,207,.15),0 0 14px rgba(108,76,255,.35);text-shadow:0 0 8px rgba(125,255,207,.6);position:relative;overflow:hidden}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}
+h1{display:flex;align-items:center;gap:10px;margin:0;padding:10px 16px;border-radius:12px;
+  font-family:'Share Tech Mono',ui-monospace,Consolas,monospace;font-size:clamp(1.2rem,5.5vw,1.5rem);font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  color:#9dffe0;background:linear-gradient(#0b1030,#101845);border:1px solid #4a5cd0;
+  box-shadow:inset 0 0 14px rgba(125,255,207,.2),0 0 20px rgba(108,76,255,.5);text-shadow:0 0 10px rgba(125,255,207,.8);position:relative;overflow:hidden}
 h1::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px);pointer-events:none}
-h1 .led{width:9px;height:9px;border-radius:50%;background:#3dff9b;box-shadow:0 0 8px #3dff9b;animation:blink 1.6s steps(2,start) infinite;flex:none}
-h1 .live{font-size:.6rem;letter-spacing:.2em;color:#0b1030;background:#7dffcf;border-radius:4px;padding:2px 5px;text-shadow:none}
+h1 .led{width:11px;height:11px;border-radius:50%;background:#3dff9b;box-shadow:0 0 8px #3dff9b;animation:blink 1.6s steps(2,start) infinite;flex:none}
+h1 .live{font-size:.7rem;letter-spacing:.2em;color:#0b1030;background:#7dffcf;border-radius:4px;padding:2px 5px;text-shadow:none}
 @keyframes blink{50%{opacity:.25}}
 .right{display:flex;gap:8px;align-items:center}
 .score{font-family:'Space Grotesk',sans-serif;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:6px 12px;border-radius:999px;transition:transform .2s}
