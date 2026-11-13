@@ -35,6 +35,7 @@ h1 .live{font-size:.7rem;letter-spacing:.2em;color:#0b1030;background:#7dffcf;bo
 .right{display:flex;gap:8px;align-items:center}
 .score{font-family:'Space Grotesk',sans-serif;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:6px 12px;border-radius:999px;transition:transform .2s}
 .score.pop{animation:pop .5s}
+.streak{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--accent);background:var(--bg);border:1px solid var(--border);padding:5px 10px;border-radius:999px}
 #theme{border:1px solid var(--border);background:transparent;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer}
 .bar{height:10px;background:var(--border);border-radius:999px;margin:18px 0 6px;overflow:hidden}
 .bar div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:width .5s cubic-bezier(.4,1.4,.6,1)}
@@ -69,7 +70,7 @@ button.next:hover{transform:scale(1.02)}
 <main>
   <header>
     <h1><span class="led" aria-hidden="true"></span>Space Quiz<span class="live" aria-hidden="true">LIVE</span></h1>
-    <div class="right"><span class="score" id="score">⭐ 0</span><button id="theme" aria-label="Toggle theme">🌙</button></div>
+    <div class="right"><span class="score" id="score">⭐ 0</span><span class="streak" id="streak" aria-label="Current streak: 0">🔥 0</span><button id="theme" aria-label="Toggle theme">🌙</button></div>
   </header>
   <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="10" id="barwrap"><div id="bar"></div></div>
   <div class="count" id="count"></div>
@@ -96,7 +97,7 @@ const Q=[
 ["🕳️","What is the boundary around a black hole called?",["Corona","Event horizon","Photosphere","Singularity"],1,"Nothing, not even light, escapes beyond it."]
 ];
 const $=id=>document.getElementById(id);
-let i=0,score=0,locked=false;
+let i=0,score=0,streak=0,locked=false;
 const praise=["Brilliant! 🎉","Out of this world! 🌟","Stellar! 🚀","Nailed it! 🔥","Cosmic! ✨"];
 const oops=["Houston, we have a problem 🛸","Not quite! 💫","Lost in space! 🌠"];
 const pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -114,8 +115,9 @@ function answer(n,btn){
   const c=Q[i][3],bs=[...document.querySelectorAll(".opt")];
   bs.forEach(b=>b.disabled=true);
   const ok=n===c;
-  if(ok){score++;btn.classList.add("correct");$("score").textContent="⭐ "+score;$("score").classList.remove("pop");void $("score").offsetWidth;$("score").classList.add("pop");burst(18)}
-  else{btn.classList.add("wrong");bs[c].classList.add("correct")}
+  if(ok){score++;streak++;btn.classList.add("correct");$("score").textContent="⭐ "+score;$("score").classList.remove("pop");void $("score").offsetWidth;$("score").classList.add("pop");burst(18)}
+  else{streak=0;btn.classList.add("wrong");bs[c].classList.add("correct")}
+  $("streak").textContent="🔥 "+streak;$("streak").setAttribute("aria-label","Current streak: "+streak);
   const fb=$("fb");fb.className="fb in";
   fb.innerHTML=`<span style="color:${ok?"var(--good)":"var(--bad)"}">${ok?pick(praise):pick(oops)}</span><small>${Q[i][4]}</small>`;
   $("bar").style.width=((i+1)/Q.length*100)+"%";
@@ -139,7 +141,7 @@ function finish(){
   $("end").innerHTML=`<div class="big">${m[0]}</div><h2>${m[1]}</h2><p>You scored <b>${score}/${Q.length}</b></p><button class="next" onclick="restart()">Play again 🔄</button>`;
   $("end").classList.remove("hidden");$("end").querySelector("h2").tabIndex=-1;$("end").querySelector("h2").focus();if(score>=6)burst(50);
 }
-function restart(){i=0;score=0;$("score").textContent="⭐ 0";$("end").classList.add("hidden");$("quiz").classList.remove("hidden");show();document.querySelector(".opt").focus()}
+function restart(){i=0;score=0;streak=0;$("score").textContent="⭐ 0";$("streak").textContent="🔥 0";$("streak").setAttribute("aria-label","Current streak: 0");$("end").classList.add("hidden");$("quiz").classList.remove("hidden");show();document.querySelector(".opt").focus()}
 
 const root=document.documentElement;
 function setTheme(t){root.dataset.theme=t;$("theme").textContent=t==="dark"?"☀️":"🌙"}
